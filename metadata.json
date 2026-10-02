@@ -1,0 +1,6 @@
+{
+  "name": "Brand Mock-Up",
+  "description": "Generate high-resolution commercial mockups across billboards, print newspapers, and social media formats.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
