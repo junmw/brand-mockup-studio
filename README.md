@@ -1,167 +1,215 @@
 # Brand Mockup Studio
 
-> Create photorealistic, multi-channel commercial campaigns across print, digital, and outdoor media — while keeping your product's design, label, and materials strictly consistent.
+Brand Mockup Studio generates a set of product advertising mockups from a single product description. It can render the same product across billboards, newspapers, social posts, subway displays, and magazine spreads while using the first generated image as a visual reference for the rest of the set.
 
-[![React 19](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-6-646CFF.svg)](https://vitejs.dev/)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-CSS_v4-38B2AC.svg)](https://tailwindcss.com/)
-[![Gemini](https://img.shields.io/badge/Google_Gemini-3.1_Flash_Image-orange.svg)](https://ai.google.dev/)
+The project started from a simple problem: generating one product image is easy, but generating several campaign assets without the product changing between images is much harder. Brand Mockup Studio uses a reference-image workflow to keep the product's shape, label, colors, and materials closer to the original generation as it moves between formats.
 
----
+<img width="1099" height="641" alt="Screenshot 2026-10-02 005245" src="https://github.com/user-attachments/assets/b8e99fe0-e358-41c3-a82a-0e5aadf63791" />
 
-## Why this exists
+## Features
 
-If you've ever put together a brand pitch, agency deck, or launch deck for a physical product, you know the drill:
+- Generate mockups for five advertising formats:
+  - Billboard
+  - Newspaper
+  - Social post
+  - Subway poster
+  - Magazine ad
+- Use the first generated image as a visual reference for later generations
+- Generate only the formats you select
+- Add missing formats without rebuilding the entire collection
+- Reroll individual mockups
+- Change an individual mockup's aspect ratio
+- Preview images in a larger lightbox
+- Download the full collection as a ZIP
+- Fall back to local SVG preview mockups when the Gemini API quota is unavailable
+- Confirm before clearing an existing project
 
-1. You scour the web for five different Photoshop mockup templates.
-2. You wrestle with smart objects, conflicting perspective grids, and mismatched lighting setups.
-3. By the end of the day, your product looks like a completely different item on the billboard than it does in the magazine ad.
+## How it works
 
-**Brand Mockup Studio** solves this. You describe your product once (or pick one of the curated starter concepts), and it generates a cohesive commercial rollout across billboards, morning broadsheets, subway lightboxes, magazine spreads, and square social media posts.
+The generation flow is built around an anchor image.
 
-Best of all, it locks your product's silhouette, packaging finish, branding, and colorway across every single format.
+When a collection is created, the first selected format is generated without a reference image. That result becomes the visual anchor for the rest of the collection.
 
----
+The backend then passes the anchor image to subsequent Gemini requests along with the product description and instructions for the requested advertising format. This gives the model visual context for details such as packaging, typography, color, and material.
 
-## Highlights
+```text
+Product description
+        │
+        ▼
+Generate first selected medium
+        │
+        ▼
+Use result as anchor image
+        │
+        ├──► Billboard
+        ├──► Newspaper
+        ├──► Social post
+        ├──► Subway poster
+        └──► Magazine ad
+```
 
-### 🎯 True Cross-Medium Brand Consistency
-The hardest part about generative imagery in marketing is character/product consistency. Brand Mockup Studio uses an **Anchor Reference Pipeline**:
-- The primary medium (e.g. the Highway Billboard) is generated first to establish the product's visual identity — shape, material, label layout, and colorway.
-- That visual signature is automatically passed into subsequent generations as a visual anchor. Your obsidian dripper or cold brew can looks like the exact same manufactured item whether it's printed on grainy newsprint or illuminated behind subway glass.
+Individual mockups can also be regenerated without rebuilding the entire set. When possible, those requests reuse the existing anchor image.
 
-### 🚫 Strict Commercial Discipline (No People, No Distractions)
-Stock mockups often suffer from awkward hands or uncanny AI humans holding things. Every prompt in Brand Mockup Studio enforces strict negative directives: strictly inanimate commercial advertising environments with zero human distractions. The spotlight stays entirely on your product.
+## Supported formats
 
-### 📐 In-Card Aspect Ratio Switching
-Want your billboard in 16:9, but need the magazine ad in 4:3 and the social post in 1:1 or 9:16? 
-You can switch aspect ratios directly inside any card's settings drawer (`16:9`, `4:3`, `1:1`, `3:4`, `9:16`). Toggling the ratio re-renders **only that specific card**, keeping the rest of your mockups untouched.
+| Format | Default aspect ratio |
+| --- | --- |
+| Billboard | `16:9` |
+| Newspaper | `3:4` |
+| Social post | `1:1` |
+| Subway poster | `3:4` |
+| Magazine ad | `4:3` |
 
-### 📦 1-Click Bulk ZIP Export
-Export your entire collection in a single click. Every generated image is packaged into a clean `.zip` archive with organized sequential filenames (e.g., `01-billboard.png`, `02-newspaper.png`), ready to drop into Figma, Keynote, or your pitch deck.
+Individual cards can also be regenerated in `16:9`, `4:3`, `1:1`, `3:4`, or `9:16`.
 
-### 🛡️ Accidental Reset Protection
-The "New project" action includes a confirmation safeguard. It lets you know how many rendered mockups will be cleared and offers a quick "Download ZIP first" shortcut so you never lose good work by mistake.
+## Tech stack
 
-### ⚡ Offline Sample Mockup Engine
-Running low on API quota or working offline? The studio automatically falls back to lightweight, handcrafted SVG preview mockups complete with realistic broadsheet halftone textures, subway reflections, and billboard night skylines.
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS 4
+- Express
+- Google Gemini via `@google/genai`
+- JSZip
+- Lucide React
+- Motion
 
----
+## Architecture
 
-## Supported Advertising Mediums
+The application uses a React frontend and an Express server.
 
-| Medium | Native Ratio | Description |
-| :--- | :---: | :--- |
-| **Highway Billboard** | `16:9` | Massive outdoor roadside display high above a modern metropolis at golden hour. |
-| **Morning Broadsheet** | `3:4` | Authentic newsprint texture, full-column editorial print layout, ink grain, and paper folds. |
-| **Social Media Creative** | `1:1` | Clean, edge-to-edge square digital commercial creative ready for feeds (no phone bezels or fake screen frames). |
-| **Subway Lightbox** | `3:4` | Backlit underground metro wall display with ambient platform reflections and ceramic tile architecture. |
-| **Magazine Ad** | `4:3` | Glossy luxury lifestyle publication two-page editorial spread on a marble desk. |
+```text
+React frontend
+     │
+     │ HTTP / JSON
+     ▼
+Express API
+     │
+     │ @google/genai
+     ▼
+Google Gemini image generation
+```
 
----
+The backend exposes three main generation routes:
 
-## Getting Started
+- `POST /api/generate-all` — creates a new collection and uses the first image as the reference for the remaining formats
+- `POST /api/generate-single` — regenerates one mockup or changes its aspect ratio
+- `POST /api/generate-missing` — adds formats to an existing collection while reusing its anchor image
 
-### Prerequisites
+If Gemini returns a quota-related error, the server returns locally generated SVG preview mockups instead. This keeps the interface usable even when live image generation is unavailable.
 
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- A [Google Gemini API Key](https://aistudio.google.com/app/apikey)
+## Getting started
+
+### Requirements
+
+- Node.js 18+
+- Google Gemini API key
 
 ### Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/brand-mockup-studio.git
-   cd brand-mockup-studio
-   ```
+Clone the repository:
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables:**
-   Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-   Add your Gemini API key:
-   ```env
-   GEMINI_API_KEY="your-gemini-api-key-here"
-   ```
-
-4. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-   Open your browser at `http://localhost:3000`.
-
----
-
-## Available Scripts
-
-- `npm run dev` — Starts the Express backend and Vite development server on port 3000.
-- `npm run build` — Builds the Vite client application and bundles `server.ts` into `dist/server.cjs` via esbuild.
-- `npm run start` — Runs the compiled production server.
-- `npm run lint` — Runs TypeScript type-checking without emitting files.
-
----
-
-## How It Works (Architecture)
-
-```
-┌────────────────────────────────────────────────────────┐
-│                   React 19 Frontend                    │
-│  - Medium Selector & Interactive Aspect Ratio Toggles  │
-│  - Mockup Collection Grid & In-Card Settings Drawers   │
-│  - Lightbox Zoom Modal & JSZip Bulk Downloader         │
-└───────────────────────────┬────────────────────────────┘
-                            │ HTTP JSON API
-┌───────────────────────────▼────────────────────────────┐
-│                    Express Backend                     │
-│  - /api/generate-all     (Batch with Anchor Passing)   │
-│  - /api/generate-single  (Targeted Rerolls & Ratios)   │
-│  - /api/generate-missing (On-demand additions)         │
-└───────────────────────────┬────────────────────────────┘
-                            │ @google/genai SDK
-┌───────────────────────────▼────────────────────────────┐
-│          Google Gemini (gemini-3.1-flash-image)        │
-│  - High-fidelity commercial product visualization     │
-│  - Multimodal anchor reference conditioning            │
-│  - Aspect ratio-guided image generation                │
-└────────────────────────────────────────────────────────┘
+```bash
+git clone https://github.com/junmw/brand-mockup-studio.git
+cd brand-mockup-studio
 ```
 
-1. **Initial Anchor Request**: When you click **"Generate Mockup Collection"**, the backend generates the first medium.
-2. **Visual Continuity Passing**: The returned image bytes from the primary shot are passed into the subsequent API calls as multimodal reference context alongside strict brand preservation directives.
-3. **Targeted Updates**: When rerolling an individual card or toggling its aspect ratio, only that card communicates with `/api/generate-single`, reusing the existing product anchor to keep the campaign uniform.
+Install dependencies:
 
----
+```bash
+npm install
+```
 
-## Tech Stack
+Create a local environment file:
 
-- **UI & Framework**: [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Packaging & Archiving**: [JSZip](https://stuk.github.io/jszip/)
-- **Server**: [Express](https://expressjs.com/) with Vite middleware
-- **AI Model**: Google Gemini (`gemini-3.1-flash-image`) via `@google/genai`
+```bash
+cp .env.example .env
+```
 
----
+Add your Gemini API key:
 
-## Contributing
+```env
+GEMINI_API_KEY="your-gemini-api-key"
+```
 
-Contributions, feedback, and ideas for new mediums (bus shelters, packaging boxes, store windows) are very welcome!
+Start the development server:
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingMedium`)
-3. Commit your Changes (`git commit -m 'Add AmazingMedium preset'`)
-4. Push to the Branch (`git push origin feature/AmazingMedium`)
-5. Open a Pull Request
+```bash
+npm run dev
+```
 
----
+Then open:
 
-## License
+```text
+http://localhost:3000
+```
 
-Distributed under the MIT License. Feel free to adapt and build on top of this for your own commercial or personal projects.
+## Scripts
+
+```bash
+npm run dev
+```
+
+Starts the Express server with Vite running as development middleware.
+
+```bash
+npm run build
+```
+
+Builds the Vite frontend and bundles the Express server for production.
+
+```bash
+npm run start
+```
+
+Runs the production server.
+
+```bash
+npm run lint
+```
+
+Runs the TypeScript compiler without emitting files.
+
+## Project structure
+
+```text
+brand-mockup-studio/
+├── public/
+├── src/
+│   ├── components/
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── sampleMockups.ts
+│   └── types.ts
+├── .env.example
+├── server.ts
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
+```
+
+## What I focused on
+
+The main technical problem I wanted to explore was consistency across AI-generated images.
+
+Generating each advertising format independently would give the model no visual knowledge of what it generated previously. Instead, the application generates one image first and sends that image back with later requests as multimodal context.
+
+I also kept generation granular. Adding another format, changing an aspect ratio, or rerolling one result does not require rebuilding the whole collection.
+
+The offline preview system handles another practical problem: image-generation APIs have quotas and can fail. When the server detects a quota-related response, it can return lightweight SVG mockups so the rest of the application can still be tested.
+
+## Current limitations
+
+- Visual consistency still depends on the image model and cannot be guaranteed pixel-for-pixel.
+- Generated images are held in application state rather than saved as persistent projects.
+- The available advertising formats are currently defined in code.
+- Live image generation requires a Gemini API key and available API quota.
+
+## Possible next steps
+
+- Persist projects and generated assets
+- Allow users to upload an existing product image as the initial reference
+- Add custom advertising formats
+- Store generation history
+- Add automated tests for API and UI flows
+- Move long-running generation work to a background job system for larger collections
