@@ -371,8 +371,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
             <p className="text-xs text-gray-600 leading-relaxed">
               If the Gemini image-generation quota is unavailable, Brand
               Mockup Studio can substitute local SVG preview images so you can
-              continue testing the interface and export workflow. Live image
-              generation requires an available Gemini API quota.
+              continue testing the interface and export workflow. Live image generation requires a configured Gemini API key and available quota..
             </p>
           </div>
 
