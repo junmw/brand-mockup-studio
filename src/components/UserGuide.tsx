@@ -4,14 +4,11 @@ import {
   Layers,
   RefreshCw,
   SlidersHorizontal,
-  Download,
   AlertCircle,
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
-  Image as ImageIcon,
   Compass,
-  FileArchive,
   Maximize2,
 } from "lucide-react";
 
@@ -27,7 +24,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
         <div className="max-w-2xl space-y-4">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-[11px] font-medium tracking-wide uppercase">
             <Compass className="w-3.5 h-3.5 text-gray-500" />
-            <span>User Documentation</span>
+            <span>User Guide</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 leading-tight">
@@ -35,7 +32,10 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
           </h1>
 
           <p className="text-sm text-gray-600 leading-relaxed">
-            Create photorealistic, coordinated marketing campaigns across print, digital, and outdoor media while keeping your product's silhouette, packaging materials, and branding completely consistent.
+            Brand Mockup Studio creates product advertising mockups across
+            print, digital, and outdoor formats. The first mockup in a
+            collection becomes the visual reference for later generations,
+            which helps keep product details more consistent between images.
           </p>
 
           <div className="pt-2">
@@ -57,35 +57,53 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
           <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0">
             <Layers className="w-5 h-5 text-amber-400" />
           </div>
+
           <div>
             <h2 className="text-lg font-bold tracking-tight text-white">
-              The "Visual Anchor" Pipeline
+              How the Reference Image Works
             </h2>
+
             <p className="text-xs text-gray-400">
-              Why your product looks identical across all mediums
+              Using the first mockup as context for the rest of the collection
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs text-gray-300">
           <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-2">
-            <span className="font-semibold text-white block text-sm">1. The Primary Shot</span>
+            <span className="font-semibold text-white block text-sm">
+              1. Create the First Mockup
+            </span>
+
             <p className="text-gray-400 leading-relaxed">
-              When you generate your campaign, the studio renders your primary medium first (typically the Billboard). This establishes the definitive visual baseline: the exact shape, material finish, label typography, and color palette.
+              The first medium you select is generated without a reference
+              image. That result becomes the visual reference for the rest of
+              the collection.
             </p>
           </div>
 
           <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-2">
-            <span className="font-semibold text-white block text-sm">2. Context Passing</span>
+            <span className="font-semibold text-white block text-sm">
+              2. Reuse It as Context
+            </span>
+
             <p className="text-gray-400 leading-relaxed">
-              The visual data from this primary shot is automatically passed forward to every other medium. The model is instructed to preserve the identical manufactured product while adapting only the advertising environment.
+              When the remaining formats are generated, the first image is
+              sent back to the model along with your product description and
+              instructions for the new format.
             </p>
           </div>
 
           <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-2">
-            <span className="font-semibold text-white block text-sm">3. Cohesive Campaign</span>
+            <span className="font-semibold text-white block text-sm">
+              3. Reduce Visual Drift
+            </span>
+
             <p className="text-gray-400 leading-relaxed">
-              Whether your product appears printed on grainy morning newsprint, inside an illuminated underground subway poster, or on a glossy magazine spread, the packaging and logo stay strictly synchronized.
+              The reference gives the model more context for details such as
+              shape, packaging, color, typography, and materials. Results can
+              still vary between generations, but the reference helps keep the
+              collection more consistent.
             </p>
           </div>
         </div>
@@ -97,8 +115,9 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
           <h2 className="text-lg font-bold text-gray-900 tracking-tight">
             Step-by-Step Workflow
           </h2>
+
           <p className="text-xs text-gray-500 mt-0.5">
-            Everything you need to know from initial idea to final presentation
+            From the first product description to a finished collection
           </p>
         </div>
 
@@ -109,18 +128,35 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-800 text-xs font-bold shrink-0">
                 1
               </span>
+
               <h3 className="text-sm font-semibold text-gray-900">
-                Describe Your Product & Select Mediums
+                Describe Your Product and Choose Formats
               </h3>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed pl-10">
-              Enter a clear description of your product in the text area. You can also click any of the preset pills (such as <em>Matte Obsidian Coffee Dripper</em> or <em>Brutalist Concrete Scent Diffuser</em>) for inspiration. Toggle the checkboxes for the mediums you want to include in your collection.
+              Enter a description of the product you want to visualize. Then
+              select one or more formats from the medium buttons. Brand Mockup
+              Studio currently supports Billboard, Newspaper, Social Post,
+              Subway Poster, and Magazine Ad.
             </p>
+
             <div className="pl-10 pt-1">
               <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 text-[11px] text-gray-600 space-y-1">
-                <span className="font-semibold text-gray-800 block">💡 Pro Tip for Best Results:</span>
+                <span className="font-semibold text-gray-800 block">
+                  Tip for better results
+                </span>
+
                 <p>
-                  Include specific details like materials (e.g., <em>matte black anodized aluminum, fluted amber glass, embossed gold foil</em>), form factors, and typography hints. The clearer your product's physical identity, the sharper the mockups will be.
+                  Include the details that matter most to the product's
+                  appearance, such as materials, colors, packaging, shape, or
+                  typography. For example, instead of{" "}
+                  <em>black coffee dripper</em>, you might use{" "}
+                  <em>
+                    matte black ceramic coffee dripper with a cork base and
+                    minimal white branding
+                  </em>
+                  .
                 </p>
               </div>
             </div>
@@ -132,12 +168,18 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-800 text-xs font-bold shrink-0">
                 2
               </span>
+
               <h3 className="text-sm font-semibold text-gray-900">
-                Generate the Campaign
+                Create Your Mockups
               </h3>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed pl-10">
-              Click the black <strong>"Generate Mockup Collection"</strong> button. The studio will render the primary reference mockup first and then smoothly generate the rest of your selected mediums. During generation, real-time status messages show which layout is currently in progress.
+              Select <strong>Create Mockups</strong> to start generating the
+              collection. The first selected medium is created first and
+              becomes the visual reference for the remaining formats. The
+              status message will update while the collection is being
+              generated.
             </p>
           </div>
 
@@ -147,12 +189,18 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-800 text-xs font-bold shrink-0">
                 3
               </span>
+
               <h3 className="text-sm font-semibold text-gray-900">
-                Add Additional Formats Later (Without Restarting)
+                Add Another Format Later
               </h3>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed pl-10">
-              Already rendered three formats and now realize you also need a Subway Poster or Magazine Ad? Simply check the box for the additional medium. An "ungenerated card" placeholder will appear in your collection. Click <strong>"Generate this mockup"</strong> to render it using your existing product reference, without re-running any of your finished images.
+              You do not need to regenerate the whole collection if you
+              decide you need another format. Select an additional medium and
+              an empty card will appear for it. Choose{" "}
+              <strong>Create [Medium]</strong> to generate the new mockup using
+              the existing reference image.
             </p>
           </div>
 
@@ -162,12 +210,18 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-800 text-xs font-bold shrink-0">
                 4
               </span>
+
               <h3 className="text-sm font-semibold text-gray-900">
-                Re-roll (Regenerate) an Individual Medium
+                Regenerate One Mockup
               </h3>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed pl-10">
-              If you want an alternate angle, lighting variation, or composition for a specific medium, click the circular <RefreshCw className="w-3.5 h-3.5 inline mx-1 text-gray-600" /> <strong>Refresh</strong> button on that card's header bar. Only that single medium will re-render, keeping your product style locked and the rest of your collection untouched.
+              If you want to try a different composition or variation, select
+              the circular{" "}
+              <RefreshCw className="w-3.5 h-3.5 inline mx-1 text-gray-600" />{" "}
+              <strong>Refresh</strong> button on that mockup. Only that format
+              is regenerated. The rest of the collection remains unchanged.
             </p>
           </div>
 
@@ -177,12 +231,20 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-800 text-xs font-bold shrink-0">
                 5
               </span>
+
               <h3 className="text-sm font-semibold text-gray-900">
-                Adjust Aspect Ratios Per Medium
+                Change an Aspect Ratio
               </h3>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed pl-10">
-              Need your Social Post formatted for Instagram Stories (9:16) instead of a square feed (1:1)? Click the <SlidersHorizontal className="w-3.5 h-3.5 inline mx-1 text-gray-600" /> <strong>Settings</strong> button or the dotted aspect ratio badge on the card. Choose from <strong>16:9, 4:3, 1:1, 3:4, or 9:16</strong>. The medium will immediately re-render in the new dimension without modifying any other cards.
+              Select the{" "}
+              <SlidersHorizontal className="w-3.5 h-3.5 inline mx-1 text-gray-600" />{" "}
+              <strong>Settings</strong> button or the aspect-ratio label on a
+              mockup to choose a different size. Available ratios are{" "}
+              <strong>16:9, 4:3, 1:1, 3:4, and 9:16</strong>. Changing the
+              ratio regenerates that mockup without rebuilding the rest of
+              the collection.
             </p>
           </div>
 
@@ -192,12 +254,19 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-800 text-xs font-bold shrink-0">
                 6
               </span>
+
               <h3 className="text-sm font-semibold text-gray-900">
-                Review in Fullscreen & Bulk Export
+                Preview and Download Your Work
               </h3>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed pl-10">
-              Click any image or the <Maximize2 className="w-3.5 h-3.5 inline mx-1 text-gray-600" /> expand icon to open a high-resolution lightbox preview. To download all your assets at once, click <strong>"Download All (#)"</strong> on the Mockup Collection bar. All rendered mockups will be neatly packaged into a single organized <code>.zip</code> file with numbered filenames.
+              Select an image or the{" "}
+              <Maximize2 className="w-3.5 h-3.5 inline mx-1 text-gray-600" />{" "}
+              expand icon to open a larger preview. You can download an
+              individual mockup from its card or select{" "}
+              <strong>Download All</strong> to package the current collection
+              into a ZIP file.
             </p>
           </div>
         </div>
@@ -206,7 +275,7 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
       {/* Mediums Breakdown Table */}
       <section className="bg-white border border-gray-200 rounded-xl p-6 sm:p-7 shadow-xs space-y-4">
         <h2 className="text-sm font-semibold text-gray-900">
-          Available Commercial Mediums
+          Available Formats
         </h2>
 
         <div className="overflow-x-auto">
@@ -215,40 +284,65 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
               <tr className="border-b border-gray-100 text-gray-400">
                 <th className="py-2.5 font-medium">Medium</th>
                 <th className="py-2.5 font-medium">Default Ratio</th>
-                <th className="py-2.5 font-medium">Advertising Environment</th>
-                <th className="py-2.5 font-medium">Best For</th>
+                <th className="py-2.5 font-medium">Output</th>
+                <th className="py-2.5 font-medium">Useful For</th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-gray-100 text-gray-600">
               <tr>
-                <td className="py-3 font-semibold text-gray-900">Billboard</td>
+                <td className="py-3 font-semibold text-gray-900">
+                  Billboard
+                </td>
                 <td className="py-3 font-mono text-gray-500">16:9</td>
-                <td className="py-3">Massive outdoor highway display with skyline golden hour backdrop</td>
-                <td className="py-3">Large-scale outdoor campaigns & pitch decks</td>
+                <td className="py-3">Outdoor billboard presentation</td>
+                <td className="py-3">
+                  Outdoor campaigns and presentation concepts
+                </td>
               </tr>
+
               <tr>
-                <td className="py-3 font-semibold text-gray-900">Newspaper</td>
+                <td className="py-3 font-semibold text-gray-900">
+                  Newspaper
+                </td>
                 <td className="py-3 font-mono text-gray-500">3:4</td>
-                <td className="py-3">Broadsheet print with authentic halftone texture and editorial copy</td>
-                <td className="py-3">Print advertising & luxury press announcements</td>
+                <td className="py-3">Printed newspaper advertisement</td>
+                <td className="py-3">
+                  Print advertising and editorial concepts
+                </td>
               </tr>
+
               <tr>
-                <td className="py-3 font-semibold text-gray-900">Social Post</td>
+                <td className="py-3 font-semibold text-gray-900">
+                  Social Post
+                </td>
                 <td className="py-3 font-mono text-gray-500">1:1</td>
-                <td className="py-3">Edge-to-edge square creative (no fake phone screens or hand overlays)</td>
-                <td className="py-3">Digital marketing, Instagram feed, web display</td>
+                <td className="py-3">Square digital advertising creative</td>
+                <td className="py-3">
+                  Social media and digital campaign concepts
+                </td>
               </tr>
+
               <tr>
-                <td className="py-3 font-semibold text-gray-900">Subway Poster</td>
+                <td className="py-3 font-semibold text-gray-900">
+                  Subway Poster
+                </td>
                 <td className="py-3 font-mono text-gray-500">3:4</td>
-                <td className="py-3">Illuminated metro station lightbox with ceramic tile reflections</td>
-                <td className="py-3">Transit advertising & urban market rollouts</td>
+                <td className="py-3">Transit poster presentation</td>
+                <td className="py-3">
+                  Transit and urban advertising concepts
+                </td>
               </tr>
+
               <tr>
-                <td className="py-3 font-semibold text-gray-900">Magazine Ad</td>
+                <td className="py-3 font-semibold text-gray-900">
+                  Magazine Ad
+                </td>
                 <td className="py-3 font-mono text-gray-500">4:3</td>
-                <td className="py-3">Glossy lifestyle editorial spread open on a marble desk</td>
-                <td className="py-3">High-end retail, fashion, and lifestyle branding</td>
+                <td className="py-3">Magazine advertising spread</td>
+                <td className="py-3">
+                  Editorial, retail, and lifestyle concepts
+                </td>
               </tr>
             </tbody>
           </table>
@@ -259,10 +353,11 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
       <section className="space-y-4">
         <div>
           <h2 className="text-lg font-bold text-gray-900 tracking-tight">
-            Troubleshooting & Frequently Asked Questions
+            Troubleshooting and Common Questions
           </h2>
+
           <p className="text-xs text-gray-500 mt-0.5">
-            Quick solutions to common questions
+            A few things to know while using the Studio
           </p>
         </div>
 
@@ -270,40 +365,57 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-2">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-900">
               <AlertCircle className="w-4 h-4 text-amber-500" />
-              <span>Why am I seeing an "Offline Preview" banner?</span>
+              <span>Why am I seeing an "Offline Preview" message?</span>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed">
-              If the Gemini AI generation quota is temporarily exhausted or a billing-enabled API key has not been configured in Secrets, the app gracefully switches to handcrafted, high-fidelity SVG preview mockups. You can still test layouts, download mockups, and export ZIPs without disruption.
+              If the Gemini image-generation quota is unavailable, Brand
+              Mockup Studio can substitute local SVG preview images so you can
+              continue testing the interface and export workflow. Live image
+              generation requires an available Gemini API quota.
             </p>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-2">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-900">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Will clicking "New project" erase my images?</span>
+              <span>Will starting a new project remove my images?</span>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed">
-              Yes, starting a new project clears memory to begin a fresh campaign. To protect your work, a safety confirmation dialog will appear warning you before any deletion occurs, and provides a convenient button to download all current mockups as a ZIP file first.
+              Yes. Starting a new project clears the current mockups, product
+              description, and selected formats. A confirmation window appears
+              first and gives you the option to download the current
+              collection as a ZIP before resetting.
             </p>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-2">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-900">
               <CheckCircle2 className="w-4 h-4 text-blue-600" />
-              <span>Why are there no people in any of the mockups?</span>
+              <span>Why are there no people in the mockups?</span>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed">
-              Brand Mockup Studio strictly enforces commercial inanimate photography directives (no people, faces, or hands). This ensures the viewer's focus remains 100% on the product and prevents the uncanny artifacts typical of generic AI stock imagery.
+              The generation prompts ask the model to avoid people, faces, and
+              hands so the product remains the focus of the image. As with
+              other generative AI instructions, results may occasionally
+              vary.
             </p>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-2">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-900">
               <Sparkles className="w-4 h-4 text-purple-600" />
-              <span>How can I make the product appearance even more specific?</span>
+              <span>How can I make the product appearance more specific?</span>
             </div>
+
             <p className="text-xs text-gray-600 leading-relaxed">
-              Specify distinctive branding elements in your description: a brand name, color palette (e.g., <em>matte charcoal and copper</em>), container type (e.g., <em>heavyweight minimalist pump bottle with serif label</em>), and packaging finish. The primary shot will render these features, and the anchor pipeline will faithfully preserve them in every other medium.
+              Add the details that matter most to the product's identity,
+              such as its shape, materials, colors, packaging, brand name, or
+              typography. Those details are used when creating the first
+              mockup, which then serves as the visual reference for the rest
+              of the collection.
             </p>
           </div>
         </div>
@@ -312,11 +424,14 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onBackToStudio }) => {
       {/* Ready to Return CTA */}
       <section className="bg-white border border-gray-200 rounded-2xl p-8 text-center space-y-4 shadow-xs">
         <h3 className="text-base font-bold text-gray-900">
-          Ready to launch your commercial campaign?
+          Ready to create a collection?
         </h3>
+
         <p className="text-xs text-gray-500 max-w-md mx-auto">
-          Head back to the studio to describe your product and render high-resolution commercial layouts across print and digital media.
+          Return to the Studio to describe your product, select your formats,
+          and create your first mockups.
         </p>
+
         <button
           type="button"
           onClick={onBackToStudio}
