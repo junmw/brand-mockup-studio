@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import JSZip from "jszip";
-import { AlertCircle, RotateCcw, Download } from "lucide-react";
+import { AlertCircle, RotateCcw, Download, BookOpen } from "lucide-react";
 import { MockupItem, MediumId, AspectRatio } from "./types";
 import { MockupCard } from "./components/MockupCard";
 import { UngeneratedMediumCard } from "./components/UngeneratedMediumCard";
 import { LightboxModal } from "./components/LightboxModal";
 import { NewProjectConfirmModal } from "./components/NewProjectConfirmModal";
+import { UserGuide } from "./components/UserGuide";
 import { createSampleMockups } from "./sampleMockups";
 
 const AVAILABLE_MEDIUMS: Array<{ id: MediumId; label: string; ratio: string }> = [
@@ -28,6 +29,35 @@ export default function App() {
   const [rerollingId, setRerollingId] = useState<string | null>(null);
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [currentView, setCurrentView] = useState<"studio" | "guide">(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#guide") {
+      return "guide";
+    }
+    return "studio";
+  });
+
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === "#guide") {
+        setCurrentView("guide");
+      } else {
+        setCurrentView("studio");
+      }
+    };
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
+  const handleNavigate = (view: "studio" | "guide") => {
+    setCurrentView(view);
+    if (typeof window !== "undefined") {
+      if (view === "guide") {
+        window.location.hash = "guide";
+      } else if (window.location.hash === "#guide") {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+    }
+  };
 
   // Toggle medium selection: selecting or deselecting hides or displays the corresponding section
   const toggleMedium = (id: MediumId) => {
@@ -394,29 +424,78 @@ export default function App() {
     <div className="min-h-screen bg-[#F9F9F9] text-[#1A1A1A] flex flex-col font-sans">
       {/* Header */}
       <header className="h-16 flex items-center justify-between px-6 sm:px-10 bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="flex items-center space-x-3">
-          <span className="font-bold tracking-tight text-lg text-gray-900">
-            Brand Mockup Studio
-          </span>
-        </div>
-
-        {mockups.length > 0 && (
+        <div className="flex items-center space-x-6 sm:space-x-8">
           <button
             type="button"
-            id="header-new-project-btn"
-            onClick={() => setIsNewProjectModalOpen(true)}
-            className="text-xs text-gray-500 hover:text-red-600 font-medium transition-colors cursor-pointer"
-            title="Reset and start a new project"
+            onClick={() => handleNavigate("studio")}
+            className="flex items-center space-x-3 text-left cursor-pointer group"
           >
-            New project
+            <span className="font-bold tracking-tight text-lg text-gray-900 group-hover:text-black transition-colors">
+              Brand Mockup Studio
+            </span>
           </button>
-        )}
+
+          {/* Navigation links */}
+          <nav className="flex items-center space-x-1 sm:space-x-1.5" aria-label="Main navigation">
+            <button
+              type="button"
+              id="nav-studio-btn"
+              onClick={() => handleNavigate("studio")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                currentView === "studio"
+                  ? "bg-gray-100 text-gray-900 font-semibold"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
+            >
+              Studio
+            </button>
+            <button
+              type="button"
+              id="nav-guide-btn"
+              onClick={() => handleNavigate("guide")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+                currentView === "guide"
+                  ? "bg-gray-100 text-gray-900 font-semibold"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>User Guide</span>
+            </button>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {currentView === "guide" ? (
+            <button
+              type="button"
+              onClick={() => handleNavigate("studio")}
+              className="text-xs text-gray-600 hover:text-black font-medium transition-colors cursor-pointer"
+            >
+              Back to Studio
+            </button>
+          ) : mockups.length > 0 ? (
+            <button
+              type="button"
+              id="header-new-project-btn"
+              onClick={() => setIsNewProjectModalOpen(true)}
+              className="text-xs text-gray-500 hover:text-red-600 font-medium transition-colors cursor-pointer"
+              title="Reset and start a new project"
+            >
+              New project
+            </button>
+          ) : null}
+        </div>
       </header>
 
       {/* Main Content */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-10 py-8 space-y-8">
-        {/* Input Card */}
-        <section className="w-full max-w-3xl mx-auto space-y-4">
+        {currentView === "guide" ? (
+          <UserGuide onBackToStudio={() => handleNavigate("studio")} />
+        ) : (
+          <>
+            {/* Input Card */}
+            <section className="w-full max-w-3xl mx-auto space-y-4">
           <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-7 shadow-xs space-y-5">
             <div className="space-y-1.5">
               <label
@@ -688,6 +767,8 @@ export default function App() {
             </div>
           </section>
         ) : null}
+          </>
+        )}
       </main>
 
       {/* Lightbox Modal */}
@@ -706,10 +787,24 @@ export default function App() {
         onExportAll={handleDownloadAll}
       />
 
-      {/* Clean Footer without ornamental engines */}
+      {/* Clean Footer with User Guide Link */}
       <footer className="h-12 border-t border-gray-200 bg-white px-6 sm:px-10 flex items-center justify-between text-xs text-gray-500">
-        <span>© 2025 Brand Mockup Studio</span>
-        <span>Commercial print and digital layouts</span>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span>© 2025 Brand Mockup Studio</span>
+          <span aria-hidden="true" className="text-gray-300">·</span>
+          <span className="hidden sm:inline">Commercial print and digital layouts</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={() => handleNavigate("guide")}
+            className={`transition-colors cursor-pointer hover:text-black ${
+              currentView === "guide" ? "font-semibold text-black" : "text-gray-500"
+            }`}
+          >
+            User Guide
+          </button>
+        </div>
       </footer>
     </div>
   );
